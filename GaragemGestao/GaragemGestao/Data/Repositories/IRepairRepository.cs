@@ -1,4 +1,5 @@
 ﻿using GaragemGestao.Data.Entities;
+using GaragemGestao.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,5 +9,21 @@ namespace GaragemGestao.Data.Repositories
 {
     public interface IRepairRepository : IGenericRepository<Repair>
     {
+        Task<IQueryable<Repair>> GetRepairAsync(string username);
+
+
+        Task<IQueryable<RepairDetailTemp>> GetDetailTempsAsync(string username);
+
+
+        Task AddItemToRepairAsync(AddVehicleViewModel model, string userName);
+
+
+        Task ModifyRepairDetailTempQuantityAsync(int id, double quantity);
+
+
+        Task DeleteDetailTempAsync(int id);
+
+
+        Task<bool> ConfirmRepairAsync(string userName);
     }
 }

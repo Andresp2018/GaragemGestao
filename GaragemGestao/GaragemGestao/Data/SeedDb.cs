@@ -1,4 +1,5 @@
-﻿using GaragemGestao.Helpers;
+﻿using GaragemGestao.Data.Entities;
+using GaragemGestao.Helpers;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -55,9 +56,25 @@ namespace GaragemGestao.Data
             {
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
-
+            if (!_context.Vehicles.Any())
+            {
+                this.AddVehicle("Renault Megane", user);
+                this.AddVehicle("Opel Astra", user);
+                this.AddVehicle("Fiat 500", user);
+                this.AddVehicle("Other", user);
+                await _context.SaveChangesAsync();
+            }
         }
 
 
+        private void AddVehicle(string name, User user)
+        {
+            _context.Vehicles.Add(new Vehicle
+            {
+                ModelName = name,
+                RepairPrice = _random.Next(1000),
+                User = user
+            });
+        }
     }
 }

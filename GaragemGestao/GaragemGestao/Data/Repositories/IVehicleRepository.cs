@@ -1,4 +1,5 @@
 ﻿using GaragemGestao.Data.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,5 +9,6 @@ namespace GaragemGestao.Data.Repositories
 {
     public interface IVehicleRepository:IGenericRepository<Vehicle>
     {
+        IEnumerable<SelectListItem> GetComboVehicles();
     }
 }

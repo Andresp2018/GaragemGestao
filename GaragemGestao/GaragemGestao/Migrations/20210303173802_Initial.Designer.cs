@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaragemGestao.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210303154648_init")]
-    partial class init
+    [Migration("20210303173802_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

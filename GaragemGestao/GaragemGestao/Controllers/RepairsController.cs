@@ -7,147 +7,105 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GaragemGestao.Data;
 using GaragemGestao.Data.Entities;
+using GaragemGestao.Data.Repositories;
+using GaragemGestao.Models;
 
 namespace GaragemGestao.Controllers
 {
     public class RepairsController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IRepairRepository _repairRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        public RepairsController(DataContext context)
+        public RepairsController(IRepairRepository repairRepository, IVehicleRepository vehicleRepository)
         {
-            _context = context;
+            _repairRepository = repairRepository;
+            _vehicleRepository = vehicleRepository;
         }
-
-        // GET: Repairs
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Repairs.ToListAsync());
+            var model = await _repairRepository.GetRepairAsync(this.User.Identity.Name);
+            return View(model);
         }
 
-        // GET: Repairs/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Create()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var repair = await _context.Repairs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (repair == null)
-            {
-                return NotFound();
-            }
-
-            return View(repair);
+            var model = await _repairRepository.GetDetailTempsAsync(this.User.Identity.Name);
+            return View(model);
         }
 
-        // GET: Repairs/Create
-        public IActionResult Create()
+
+        public IActionResult AddVehicle()
         {
-            return View();
+            var model = new AddVehicleViewModel
+            {
+                Quantity = 1,
+                Vehicles = _vehicleRepository.GetComboVehicles()
+            };
+
+            return View(model);
         }
 
-        // POST: Repairs/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RepairDate,DeliveryDate,RepairDiscount")] Repair repair)
+        public async Task<IActionResult> AddVehicle(AddVehicleViewModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                _context.Add(repair);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await _repairRepository.AddItemToRepairAsync(model, this.User.Identity.Name);
+                return this.RedirectToAction("Create");
             }
-            return View(repair);
+
+            return this.View(model);
         }
 
-        // GET: Repairs/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+        public async Task<IActionResult> DeleteItem(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var repair = await _context.Repairs.FindAsync(id);
-            if (repair == null)
-            {
-                return NotFound();
-            }
-            return View(repair);
+            await _repairRepository.DeleteDetailTempAsync(id.Value);
+            return this.RedirectToAction("Create");
         }
 
-        // POST: Repairs/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RepairDate,DeliveryDate,RepairDiscount")] Repair repair)
-        {
-            if (id != repair.Id)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(repair);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RepairExists(repair.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(repair);
-        }
-
-        // GET: Repairs/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Increase(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var repair = await _context.Repairs
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (repair == null)
+            await _repairRepository.ModifyRepairDetailTempQuantityAsync(id.Value, 1);
+            return this.RedirectToAction("Create");
+        }
+
+
+        public async Task<IActionResult> Decrease(int? id)
+        {
+            if (id == null)
             {
                 return NotFound();
             }
 
-            return View(repair);
+            await _repairRepository.ModifyRepairDetailTempQuantityAsync(id.Value, -1);
+            return this.RedirectToAction("Create");
         }
 
-        // POST: Repairs/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var repair = await _context.Repairs.FindAsync(id);
-            _context.Repairs.Remove(repair);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
 
-        private bool RepairExists(int id)
+        public async Task<IActionResult> ConfirmRepair()
         {
-            return _context.Repairs.Any(e => e.Id == id);
+            var response = await _repairRepository.ConfirmRepairAsync(this.User.Identity.Name);
+            if (response)
+            {
+                return this.RedirectToAction("Index");
+            }
+
+            return this.RedirectToAction("Create");
         }
     }
 }
+
