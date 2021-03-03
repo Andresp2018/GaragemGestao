@@ -1,0 +1,51 @@
+﻿@model GaragemGestao.Models.LoginViewModel
+@{ ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml"; }
+
+
+
+<body>
+
+    <!-- form section start -->
+    <section class="w3l-hotair-form">
+        <h1>Garage Management - André Pires</h1>
+        <div class="container">
+            <!-- /form -->
+            <div class="workinghny-form-grid">
+                <div class="main-hotair">
+                    <div class="content-wthree">
+                        <h2>Log In</h2>
+                        <form id="form-login" method="post">
+                            <div asp-validation-summary="ModelOnly"></div>
+                            <div class="form-group" style="width: 350px">
+                                <label asp-for="Username">Username</label>
+                                <input asp-for="Username" class="form-control" />
+                                <span asp-validation-for="Username" class="text-warning"></span>
+                                <label asp-for="Password">Password</label>
+                                <input asp-for="Password" type="password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-warning"></span>
+                                <button class="btn" type="submit">Log In</button>
+                            </div>
+
+                        </form>
+
+                        <p class="account"> <a asp-action="Register" class="btn btn-primary">Register New User</a></p>
+                    </div>
+                    <div class="w3l_form align-self" style="width: 400px" >
+                        <div class="left_grid_info">
+                            <img src="~/images/1.png" alt="" class="img-fluid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- //form -->
+        </div>
+    </section>
+    <!-- //form section start -->
+</body>
+
+
+
+@section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
