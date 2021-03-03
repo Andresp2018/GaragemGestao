@@ -19,7 +19,7 @@ namespace GaragemGestao.Models
 
         public IEnumerable<SelectListItem> Vehicles { get; set; }
     }
-
+    
 
 }
 

@@ -89,7 +89,7 @@ namespace GaragemGestao.Controllers
                         this.ModelState.AddModelError(string.Empty, "The user couldn't be created.");
                         return this.View(model);
                     }
-
+                    await userHelper.AddUserToRoleAsync(user, "Client");
                     var loginViewModel = new LoginViewModel
                     {
                         Password = model.Password,

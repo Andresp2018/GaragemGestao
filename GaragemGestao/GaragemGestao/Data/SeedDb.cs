@@ -58,20 +58,24 @@ namespace GaragemGestao.Data
             }
             if (!_context.Vehicles.Any())
             {
-                this.AddVehicle("Renault Megane", user);
-                this.AddVehicle("Opel Astra", user);
-                this.AddVehicle("Fiat 500", user);
-                this.AddVehicle("Other", user);
+                this.AddVehicle("Renault Megane", "DT-18-DH", "Renault","4 Doors","The French car", user);
+                this.AddVehicle("Opel Astra", "RJ-10-KF", "Opel", "4 Doors", "Not that small", user);
+                this.AddVehicle("Fiat 500", "F6-21-GJ", "Fiat", "2 Doors", "Small and portable", user);
+                this.AddVehicle("Other", "N/A", "N/A", "N/A", "N/A", user);
                 await _context.SaveChangesAsync();
             }
         }
 
 
-        private void AddVehicle(string name, User user)
+        private void AddVehicle(string name,string licensePlate, string makerName, string typeName, string details, User user)
         {
             _context.Vehicles.Add(new Vehicle
             {
                 ModelName = name,
+                MakerName = makerName,
+                LicensePlate = licensePlate,
+                typeName=typeName,
+                Details =details,
                 RepairPrice = _random.Next(1000),
                 User = user
             });
