@@ -41,6 +41,8 @@ namespace GaragemGestao.Data.Entities
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Value { get { return this.Items == null ? 0 : this.Items.Sum(i => i.Value); } }
 
+        public string Issue { get; set; }
+
 
         [Display(Name = "Repair date")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd HH:mm tt}", ApplyFormatInEditMode = false)]

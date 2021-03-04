@@ -43,6 +43,29 @@ namespace GaragemGestao.Migrations
                     b.ToTable("Mechanics");
                 });
 
+            modelBuilder.Entity("GaragemGestao.Data.Entities.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Text")
+                        .IsRequired();
+
+                    b.Property<string>("UserId");
+
+                    b.Property<string>("UserName")
+                        .IsRequired();
+
+                    b.Property<DateTime>("When");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Messages");
+                });
+
             modelBuilder.Entity("GaragemGestao.Data.Entities.Repair", b =>
                 {
                     b.Property<int>("Id")
@@ -50,6 +73,8 @@ namespace GaragemGestao.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime?>("DeliveryDate");
+
+                    b.Property<string>("Issue");
 
                     b.Property<DateTime>("RepairDate");
 
@@ -68,6 +93,8 @@ namespace GaragemGestao.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Issue");
 
                     b.Property<decimal>("Price");
 
@@ -91,6 +118,8 @@ namespace GaragemGestao.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Issue");
 
                     b.Property<decimal>("Price");
 
@@ -340,6 +369,13 @@ namespace GaragemGestao.Migrations
                         .WithMany()
                         .HasForeignKey("RepairId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("GaragemGestao.Data.Entities.Message", b =>
+                {
+                    b.HasOne("GaragemGestao.Data.User", "Sender")
+                        .WithMany("Messages")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("GaragemGestao.Data.Entities.Repair", b =>

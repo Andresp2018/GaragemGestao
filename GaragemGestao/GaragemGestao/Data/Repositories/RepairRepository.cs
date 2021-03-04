@@ -45,6 +45,7 @@ namespace GaragemGestao.Data.Repositories
                 {
                     Price = vehicle.RepairPrice,
                     Vehicle = vehicle,
+                    Issue= model.Issue,
                     Quantity = model.Quantity,
                     User = user,
                 };
@@ -82,6 +83,7 @@ namespace GaragemGestao.Data.Repositories
             {
                 Price = o.Price,
                 Vehicle = o.Vehicle,
+                Issue=o.Issue,
                 Quantity = o.Quantity
             }).ToList();
 

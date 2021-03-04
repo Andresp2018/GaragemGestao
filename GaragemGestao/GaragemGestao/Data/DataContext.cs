@@ -21,6 +21,8 @@ namespace GaragemGestao.Data
         public DbSet<RepairDetail> RepairDetails { get; set; }
         public DbSet<RepairDetailTemp> RepairDetailTemps { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<Message> Messages { get; set; }
+
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -46,9 +48,16 @@ namespace GaragemGestao.Data
                 fk.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            //Message
+            modelBuilder.Entity<Message>()
+                .HasOne<User>
+                (a => a.Sender)
+                .WithMany(d => d.Messages)
+                .HasForeignKey(d => d.UserId);
 
             base.OnModelCreating(modelBuilder);
         }
+
 
     }
 }

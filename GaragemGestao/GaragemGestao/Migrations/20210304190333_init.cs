@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GaragemGestao.Migrations
 {
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -105,6 +105,22 @@ namespace GaragemGestao.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserName = table.Column<string>(nullable: false),
+                    Text = table.Column<string>(nullable: false),
+                    When = table.Column<DateTime>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RepairDetailTemps",
                 columns: table => new
                 {
@@ -113,7 +129,8 @@ namespace GaragemGestao.Migrations
                     UserId = table.Column<string>(nullable: false),
                     VehicleId = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
-                    Quantity = table.Column<double>(nullable: false)
+                    Quantity = table.Column<double>(nullable: false),
+                    Issue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -128,6 +145,7 @@ namespace GaragemGestao.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     RepairDate = table.Column<DateTime>(nullable: false),
                     DeliveryDate = table.Column<DateTime>(nullable: true),
+                    Issue = table.Column<string>(nullable: true),
                     UserId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
@@ -228,6 +246,7 @@ namespace GaragemGestao.Migrations
                     VehicleId = table.Column<int>(nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     Quantity = table.Column<double>(nullable: false),
+                    Issue = table.Column<string>(nullable: true),
                     RepairId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -297,6 +316,11 @@ namespace GaragemGestao.Migrations
                 column: "RepairId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Messages_UserId",
+                table: "Messages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RepairDetails_RepairId",
                 table: "RepairDetails",
                 column: "RepairId");
@@ -359,6 +383,14 @@ namespace GaragemGestao.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                name: "FK_Messages_AspNetUsers_UserId",
+                table: "Messages",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
                 name: "FK_RepairDetailTemps_AspNetUsers_UserId",
                 table: "RepairDetailTemps",
                 column: "UserId",
@@ -403,6 +435,9 @@ namespace GaragemGestao.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Messages");
 
             migrationBuilder.DropTable(
                 name: "RepairDetails");

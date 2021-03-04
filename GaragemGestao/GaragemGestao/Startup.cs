@@ -1,6 +1,7 @@
 ﻿using GaragemGestao.Data;
 using GaragemGestao.Data.Repositories;
 using GaragemGestao.Helpers;
+using GaragemGestao.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -68,7 +69,7 @@ namespace GaragemGestao
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-
+            services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -78,6 +79,7 @@ namespace GaragemGestao
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -89,7 +91,14 @@ namespace GaragemGestao
             app.UseStaticFiles();
             //Activates authentication
             app.UseAuthentication();
+
+            app.UseSignalR(route =>
+            {
+                route.MapHub<ChatHub>("/Home/Index");
+            });
             app.UseCookiePolicy();
+
+
 
             app.UseMvc(routes =>
             {

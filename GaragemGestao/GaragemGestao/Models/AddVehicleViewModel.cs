@@ -15,6 +15,8 @@ namespace GaragemGestao.Models
         [Range(0.0001, double.MaxValue, ErrorMessage = "The quantity of vehicle added must be a positive number.")]
         public double Quantity { get; set; }
 
+        public string Issue { get; set; }
+
 
 
         public IEnumerable<SelectListItem> Vehicles { get; set; }

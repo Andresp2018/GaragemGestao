@@ -21,6 +21,14 @@ namespace GaragemGestao.Data
         [Display(Name = "Full Name")]
         public string FullName { get { return $"{this.FirstName} {this.LastName}"; } }
 
+        
+        public User()
+        {
+            Messages = new HashSet<Message>();
+        }
+        //1-* User||Messages
+        public virtual ICollection<Message> Messages { get; set; }
+
 
     }
 }

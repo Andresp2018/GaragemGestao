@@ -22,6 +22,8 @@ namespace GaragemGestao.Data.Entities
         [DisplayFormat(DataFormatString = "{0:N2}")]
         public double Quantity { get; set; }
 
+      
+        public string Issue { get; set; }
 
         public decimal Value { get { return this.Price * (decimal)this.Quantity; } }
     }
