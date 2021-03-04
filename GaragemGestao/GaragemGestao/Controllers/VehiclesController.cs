@@ -120,8 +120,9 @@ namespace GaragemGestao.Controllers
             {
                 return NotFound();
             }
+
             var view = this.ToVehicleViewModel(vehicle);
-            return View(vehicle);
+            return View(view);
         }
         private VehicleViewModel ToVehicleViewModel(Vehicle vehicle)
         {
