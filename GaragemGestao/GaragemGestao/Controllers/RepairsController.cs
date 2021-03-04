@@ -70,6 +70,16 @@ namespace GaragemGestao.Controllers
             await _repairRepository.DeleteDetailTempAsync(id.Value);
             return this.RedirectToAction("Create");
         }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            await _repairRepository.EditDetailsAsync(id.Value);
+            return this.RedirectToAction("Create");
+        }
 
 
         public async Task<IActionResult> Increase(int? id)
@@ -94,6 +104,8 @@ namespace GaragemGestao.Controllers
             await _repairRepository.ModifyRepairDetailTempQuantityAsync(id.Value, -1);
             return this.RedirectToAction("Create");
         }
+
+
 
 
         public async Task<IActionResult> ConfirmRepair()

@@ -31,7 +31,12 @@ namespace GaragemGestao
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
             //configures the authentication, Pass will be weak for testing purposes
             services.AddIdentity<User, IdentityRole>(cfg =>
              {
@@ -48,8 +53,9 @@ namespace GaragemGestao
 
             services.AddDbContext<DataContext>(cfg =>
             {
-                cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
+                cfg.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+ 
 
             //Adding the Interfaces and Repositories
             services.AddTransient<SeedDb>();
@@ -68,6 +74,7 @@ namespace GaragemGestao
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
 
             services.AddSignalR();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -89,22 +96,20 @@ namespace GaragemGestao
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
             //Activates authentication
             app.UseAuthentication();
 
+          
             app.UseSignalR(route =>
             {
                 route.MapHub<ChatHub>("/Home/Index");
             });
-            app.UseCookiePolicy();
-
-
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Account}/{action=Login}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

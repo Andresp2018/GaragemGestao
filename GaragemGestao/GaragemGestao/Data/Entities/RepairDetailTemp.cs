@@ -30,7 +30,6 @@ namespace GaragemGestao.Data.Entities
         public string Issue { get; set; }
 
 
-
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal Value { get { return this.Price * (decimal)this.Quantity; } }
     }

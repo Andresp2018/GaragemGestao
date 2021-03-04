@@ -20,6 +20,7 @@ namespace GaragemGestao.Data.Repositories
             _userHelper = userHelper;
         }
 
+
         public async Task AddItemToRepairAsync(AddVehicleViewModel model, string userName)
         {
             var user = await _userHelper.GetUserByEmailAsync(userName);
@@ -45,7 +46,7 @@ namespace GaragemGestao.Data.Repositories
                 {
                     Price = vehicle.RepairPrice,
                     Vehicle = vehicle,
-                    Issue= model.Issue,
+                    Issue = model.Issue,
                     Quantity = model.Quantity,
                     User = user,
                 };
@@ -83,7 +84,7 @@ namespace GaragemGestao.Data.Repositories
             {
                 Price = o.Price,
                 Vehicle = o.Vehicle,
-                Issue=o.Issue,
+                Issue = o.Issue,
                 Quantity = o.Quantity
             }).ToList();
 
@@ -115,6 +116,17 @@ namespace GaragemGestao.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task EditDetailsAsync(int id)
+        {
+            var repairDetailTemp = await _context.RepairDetailTemps.FindAsync(id);
+            if (repairDetailTemp == null)
+            {
+                _context.RepairDetailTemps.Add(repairDetailTemp);
+                await _context.SaveChangesAsync();
+            }
+            return;
+
+        }
 
         public async Task<IQueryable<RepairDetailTemp>> GetDetailTempsAsync(string username)
         {

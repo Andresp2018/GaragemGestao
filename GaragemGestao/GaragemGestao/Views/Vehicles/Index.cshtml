@@ -13,6 +13,12 @@
 <table class="table">
     <thead>
         <tr>
+            @if (this.User.IsInRole("Admin"))
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.User.FullName)
+                </th>
+            }
             <th>
                 @Html.DisplayNameFor(model => model.LicensePlate)
             </th>
@@ -42,6 +48,12 @@
         @foreach (var item in Model)
         {
         <tr>
+            @if (this.User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.DisplayNameFor(model => model.User.FullName)
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.LicensePlate)
             </td>

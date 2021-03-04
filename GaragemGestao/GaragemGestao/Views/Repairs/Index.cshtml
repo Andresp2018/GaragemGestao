@@ -47,37 +47,48 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                @if (this.User.IsInRole("Admin"))
-                {
-                    <th>
-                        @Html.DisplayFor(modelItem => item.User.FullName)
-                    </th>
+        <tr>
+            @if (this.User.IsInRole("Admin"))
+            {
+                <th>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </th>
 
-                }
-                <th>
-                    @Html.DisplayFor(modelItem => item.RepairDate)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.DeliveryDate)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Lines)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Issue)
-                </th>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Value)
-                </th>
-                <td>
-                    <a asp-action="Deliver" asp-route-id="@item.Id" class="btn btn-info" id="btnDeliver">Deliver Vehicle</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Delete</a>
+            }
+            <th>
+                @Html.DisplayFor(modelItem => item.RepairDate)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.DeliveryDate)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.Lines)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.Issue)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.Value)
+            </th>
+            @if (this.User.IsInRole("Admin"))
+            {
+        <td>
+            <a asp-action="Deliver" asp-route-id="@item.Id" class="btn btn-info" id="btnDeliver">Deliver Vehicle to Customer</a> |
+            <a asp-action="DeleteItem" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Cancel Repair</a>
+            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Insert Delivery Date</a>
+        </td>
+            }
+            @if (this.User.IsInRole("Client"))
+            {
+                <td>|
+                    <a asp-action="DeleteItem" asp-route-id="@item.Id" class="btn btn-danger" id="btnDelete">Cancel Repair</a>
                 </td>
-            </tr>
+            }
+
+        </tr>
         }
     </tbody>
 </table>

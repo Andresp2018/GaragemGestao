@@ -23,6 +23,8 @@ namespace GaragemGestao.Data.Repositories
 
         Task DeleteDetailTempAsync(int id);
 
+        Task EditDetailsAsync(int id);
+
 
         Task<bool> ConfirmRepairAsync(string userName);
     }
