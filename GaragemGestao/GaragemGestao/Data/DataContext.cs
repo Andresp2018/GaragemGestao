@@ -25,7 +25,6 @@ namespace GaragemGestao.Data
         public DbSet<RepairDetailTemp> RepairDetailTemps { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public object Cities { get; internal set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

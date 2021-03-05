@@ -23,13 +23,32 @@ namespace GaragemGestao.Data
             _random = new Random();
         }
 
+        public UserManager<User> UserManager { get; }
 
         public async Task SeedAsync()
         {
             await _context.Database.EnsureCreatedAsync();
-
             await _userHelper.CheckRoleAsync("Admin");
             await _userHelper.CheckRoleAsync("Client");
+
+            if (!_context.Countries.Any())
+            {
+                var cities = new List<City>();
+                cities.Add(new City { Name = "Lisboa" });
+                cities.Add(new City { Name = "Porto" });
+                cities.Add(new City { Name = "Coimbra" });
+                cities.Add(new City { Name = "Faro" });
+
+
+                _context.Countries.Add(new Country
+                {
+                    Cities = cities,
+                    Name = "Portugal"
+                });
+
+
+                await _context.SaveChangesAsync();
+            }
 
             var user = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
             if (user == null)
@@ -40,25 +59,35 @@ namespace GaragemGestao.Data
                     LastName = "Pires",
                     Email = "admin@gmail.com",
                     UserName = "admin@gmail.com",
+                    Address = "Rua dos Lusiadas nº28",
+                    CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
+                    City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
                 };
 
                 var result = await _userHelper.AddUserAsync(user, "123456");
+
+
                 if (result != IdentityResult.Success)
                 {
                     throw new InvalidOperationException("Could not create the user in seeder");
                 }
 
-                await _userHelper.AddUserToRoleAsync(user, "Admin");
+                var token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
+
+
+                var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
+                if (!isInRole)
+                {
+                    await _userHelper.AddUsertoRoleAsync(user, "Admin");
+                }
+
+
             }
 
-            var isInRole = await _userHelper.IsUserInRoleAsync(user, "Admin");
-            if (!isInRole)
-            {
-                await _userHelper.AddUserToRoleAsync(user, "Admin");
-            }
             if (!_context.Vehicles.Any())
             {
-                this.AddVehicle("Renault Megane", "DT-18-DH", "Renault","4 Doors","The French car", user);
+                this.AddVehicle("Renault Megane", "DT-18-DH", "Renault", "4 Doors", "The French car", user);
                 this.AddVehicle("Opel Astra", "RJ-10-KF", "Opel", "4 Doors", "Not that small", user);
                 this.AddVehicle("Fiat 500", "F6-21-GJ", "Fiat", "2 Doors", "Small and portable", user);
                 this.AddVehicle("Other", "N/A", "N/A", "N/A", "N/A", user);
@@ -67,15 +96,15 @@ namespace GaragemGestao.Data
         }
 
 
-        private void AddVehicle(string name,string licensePlate, string makerName, string typeName, string details, User user)
+        private void AddVehicle(string name, string licensePlate, string makerName, string typeName, string details, User user)
         {
             _context.Vehicles.Add(new Vehicle
             {
                 ModelName = name,
                 MakerName = makerName,
                 LicensePlate = licensePlate,
-                typeName=typeName,
-                Details =details,
+                typeName = typeName,
+                Details = details,
                 RepairPrice = _random.Next(1000),
                 User = user
             });

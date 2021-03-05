@@ -65,7 +65,8 @@ namespace GaragemGestao
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IMechanicRepository, MechanicRepository>();
             services.AddScoped<IRepairRepository, RepairRepository>();
-            services.AddScoped<IAdminRepository, AdminRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IMailHelper, MailHelper>();
             services.AddScoped<IUserHelper, UserHelper>();
 
 
@@ -75,6 +76,12 @@ namespace GaragemGestao
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
+            });
+
 
 
             services.AddSignalR();

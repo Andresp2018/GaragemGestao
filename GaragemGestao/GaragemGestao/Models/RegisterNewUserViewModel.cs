@@ -65,6 +65,5 @@ namespace GaragemGestao.Models
         [Required]
         [Compare("Password")]
         public string Confirm { get; set; }
-
     }
 }
