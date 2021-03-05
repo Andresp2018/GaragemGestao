@@ -16,13 +16,16 @@ namespace GaragemGestao.Data
        
 
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<City> Cities { get; set; }
         public DbSet<Mechanic> Mechanics { get; set; }
         public DbSet<Repair> Repairs { get; set; }
         public DbSet<RepairDetail> RepairDetails { get; set; }
         public DbSet<RepairDetailTemp> RepairDetailTemps { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Message> Messages { get; set; }
-
+        public object Cities { get; internal set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

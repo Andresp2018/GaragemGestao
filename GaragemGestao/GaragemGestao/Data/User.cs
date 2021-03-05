@@ -18,10 +18,22 @@ namespace GaragemGestao.Data
         public string LastName { get; set; }
 
 
-        [Display(Name = "Full Name")]
+        [MaxLength(100, ErrorMessage = "The field {0} only can contain {1} characters.")]
+        public string Address { get; set; }
+
+
+
+        public int CityId { get; set; }
+
+
+        public City City { get; set; }
+
+
+
+        [Display(Name = "Full name")]
         public string FullName { get { return $"{this.FirstName} {this.LastName}"; } }
 
-        
+
         public User()
         {
             Messages = new HashSet<Message>();
