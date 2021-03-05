@@ -9,6 +9,7 @@ using GaragemGestao.Data;
 using GaragemGestao.Data.Entities;
 using GaragemGestao.Data.Repositories;
 using GaragemGestao.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GaragemGestao.Controllers
 {
@@ -16,11 +17,13 @@ namespace GaragemGestao.Controllers
     {
         private readonly IRepairRepository _repairRepository;
         private readonly IVehicleRepository _vehicleRepository;
+        private readonly IAdminRepository _genericRepository;
 
-        public RepairsController(IRepairRepository repairRepository, IVehicleRepository vehicleRepository)
+        public RepairsController(IRepairRepository repairRepository, IVehicleRepository vehicleRepository, IAdminRepository genericRepository)
         {
             _repairRepository = repairRepository;
             _vehicleRepository = vehicleRepository;
+            _genericRepository = genericRepository;
         }
         public async Task<IActionResult> Index()
         {
@@ -81,6 +84,55 @@ namespace GaragemGestao.Controllers
             return this.RedirectToAction("Create");
         }
 
+        // GET: Repairs/Generic/Edit/1
+        public async Task<IActionResult> EditDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var repair = await _genericRepository.GetByIdAsync(id.Value);
+            if (repair == null)
+            {
+                return NotFound();
+            }
+            return View(repair);
+        }
+
+        [Authorize(Roles = "Admin")]
+        // POST: Repair/Generic/Edit/1
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditDetails(int id, [Bind("Id,RepairDate,DeliveryDate,Issue")] Repair repair)
+        {
+            if (id != repair.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _genericRepository.UpdateAsync(repair);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!await _genericRepository.ExistAsync(repair.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(repair);
+        }
+
 
         public async Task<IActionResult> Increase(int? id)
         {
@@ -104,8 +156,6 @@ namespace GaragemGestao.Controllers
             await _repairRepository.ModifyRepairDetailTempQuantityAsync(id.Value, -1);
             return this.RedirectToAction("Create");
         }
-
-
 
 
         public async Task<IActionResult> ConfirmRepair()

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GaragemGestao.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210304220436_init")]
-    partial class init
+    [Migration("20210305003327_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -38,9 +38,13 @@ namespace GaragemGestao.Migrations
 
                     b.Property<DateTime>("StartDate");
 
+                    b.Property<string>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RepairId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Mechanics");
                 });
@@ -207,8 +211,6 @@ namespace GaragemGestao.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
 
-                    b.Property<int?>("MechanicId");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
 
@@ -229,8 +231,6 @@ namespace GaragemGestao.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MechanicId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -371,6 +371,10 @@ namespace GaragemGestao.Migrations
                         .WithMany()
                         .HasForeignKey("RepairId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("GaragemGestao.Data.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("GaragemGestao.Data.Entities.Message", b =>
@@ -418,13 +422,6 @@ namespace GaragemGestao.Migrations
                     b.HasOne("GaragemGestao.Data.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("GaragemGestao.Data.User", b =>
-                {
-                    b.HasOne("GaragemGestao.Data.Entities.Mechanic")
-                        .WithMany("Users")
-                        .HasForeignKey("MechanicId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

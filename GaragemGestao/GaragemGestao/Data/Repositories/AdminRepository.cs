@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace GaragemGestao.Data.Repositories
 {
-    public interface IMechanicRepository : IGenericRepository<Mechanic>
+    public class AdminRepository : GenericRepository<Repair>, IAdminRepository
     {
- 
+        public AdminRepository(DataContext context) : base(context)
+        {
+
+        }
     }
 }

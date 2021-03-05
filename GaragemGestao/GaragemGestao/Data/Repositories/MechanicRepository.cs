@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GaragemGestao.Data.Repositories
 {
-    public class MechanicRepository : GenericRepositoryEmployee<Mechanic>, IMechanicRepository
+    public class MechanicRepository : GenericRepository<Mechanic>, IMechanicRepository
     {
         public MechanicRepository(DataContext context) : base(context)
         {

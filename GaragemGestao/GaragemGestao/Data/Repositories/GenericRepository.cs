@@ -11,23 +11,27 @@ namespace GaragemGestao.Data.Repositories
     //This class will implement the interface
     public class GenericRepository<T> : IGenericRepository<T> where T : class, IEntity
     {
-        private DataContext _context;
+        private readonly DataContext _context;
 
-        //Constructor with the Attribute
         public GenericRepository(DataContext context)
         {
             _context = context;
         }
-        //Generic Implementation - AsNoTracking will pass the data and detaches
-        //from the database closing the connection
+
+
         public IQueryable<T> GetAll()
         {
             return _context.Set<T>().AsNoTracking();
         }
+
+
         public async Task<T> GetByIdAsync(int Id)
         {
-            return await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == Id);
+            return await _context.Set<T>()
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == Id);
         }
+
 
         public async Task CreateAsync(T entity)
         {
@@ -35,11 +39,14 @@ namespace GaragemGestao.Data.Repositories
             await SaveAllAsync();
         }
 
+
         public async Task UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
             await SaveAllAsync();
         }
+
+
 
         public async Task DeleteAsync(T entity)
         {
@@ -47,10 +54,14 @@ namespace GaragemGestao.Data.Repositories
             await SaveAllAsync();
         }
 
+
+
         public async Task<bool> ExistAsync(int Id)
         {
-            return await _context.Set<T>().AnyAsync(e => e.Id ==Id);
+            return await _context.Set<T>().AnyAsync(e => e.Id == Id);
         }
+
+
 
         public async Task<bool> SaveAllAsync()
         {

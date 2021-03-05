@@ -47,51 +47,58 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            @if (this.User.IsInRole("Admin"))
-            {
-                <td>
-                    @Html.DisplayNameFor(model => model.User.FullName)
-                </td>
-            }
-            <td>
-                @Html.DisplayFor(modelItem => item.LicensePlate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MakerName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ModelName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Details)
-            </td>
-            <td>
-                @if (!string.IsNullOrEmpty(item.ImageUrl))
-                {
-                    <img src="@Url.Content(item.ImageUrl)" alt="Image" style="width:100px;height:150px;max-width:100%;height:auto" />
-                }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.typeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RepairPrice)
-            </td>
-            <td>
+            <tr>
                 @if (this.User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit  |</a>
-                    <a asp-action="Details" asp-route-id="@item.Id">Details  |</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <td>
+                        @Html.DisplayNameFor(model => model.User.FullName)
+                    </td>
                 }
-            </td>
-            @if (this.User.Identity.IsAuthenticated && User.IsInRole("Client"))
-            {
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit  |</a>
-                <a asp-action="Details" asp-route-id="@item.Id">Details  |</a>
-            }
-        </tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.LicensePlate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MakerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ModelName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Details)
+                </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImageUrl))
+                    {
+                        <img src="@Url.Content(item.ImageUrl)" alt="Image" style="width:100px;height:150px;max-width:100%;height:auto" />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.typeName)
+                </td>
+
+                <td>                   
+                    @Html.DisplayFor(modelItem => item.RepairPrice)
+                </td>
+
+
+                <td>
+                    @if (this.User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit  |</a>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details  |</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </td>
+                <td>
+                    @if (this.User.Identity.IsAuthenticated && User.IsInRole("Client"))
+                    {
+
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit  |</a>
+                        <a asp-action="Details" asp-route-id="@item.Id">Details  |</a>
+                    }
+                </td>
+            </tr>
         }
     </tbody>
 </table>

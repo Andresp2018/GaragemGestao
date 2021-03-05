@@ -65,6 +65,7 @@ namespace GaragemGestao
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IMechanicRepository, MechanicRepository>();
             services.AddScoped<IRepairRepository, RepairRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IUserHelper, UserHelper>();
 
 

@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace GaragemGestao.Data.Repositories
 {
-    public interface IMechanicRepository : IGenericRepository<Mechanic>
+    public interface IAdminRepository : IGenericRepository<Repair>
     {
- 
     }
 }
