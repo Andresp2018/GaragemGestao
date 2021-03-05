@@ -17,13 +17,12 @@ namespace GaragemGestao.Controllers
     {
         private readonly IRepairRepository _repairRepository;
         private readonly IVehicleRepository _vehicleRepository;
-        private readonly IAdminRepository _genericRepository;
 
-        public RepairsController(IRepairRepository repairRepository, IVehicleRepository vehicleRepository, IAdminRepository genericRepository)
+
+        public RepairsController(IRepairRepository repairRepository, IVehicleRepository vehicleRepository)
         {
             _repairRepository = repairRepository;
             _vehicleRepository = vehicleRepository;
-            _genericRepository = genericRepository;
         }
         public async Task<IActionResult> Index()
         {
@@ -84,54 +83,6 @@ namespace GaragemGestao.Controllers
             return this.RedirectToAction("Create");
         }
 
-        // GET: Repairs/Generic/Edit/1
-        public async Task<IActionResult> EditDetails(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var repair = await _genericRepository.GetByIdAsync(id.Value);
-            if (repair == null)
-            {
-                return NotFound();
-            }
-            return View(repair);
-        }
-
-        [Authorize(Roles = "Admin")]
-        // POST: Repair/Generic/Edit/1
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditDetails(int id, [Bind("Id,RepairDate,DeliveryDate,Issue")] Repair repair)
-        {
-            if (id != repair.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    await _genericRepository.UpdateAsync(repair);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await _genericRepository.ExistAsync(repair.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(repair);
-        }
 
 
         public async Task<IActionResult> Increase(int? id)
@@ -167,6 +118,44 @@ namespace GaragemGestao.Controllers
             }
 
             return this.RedirectToAction("Create");
+        }
+
+        public async Task<IActionResult> Deliver(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _repairRepository.GetRepairAsync(id.Value);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var model = new DeliverViewModel
+            {
+                Id = order.Id,
+                DeliveryDate = DateTime.Today
+            };
+
+            return View(model);
+
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Deliver(DeliverViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _repairRepository.DeliverRepairAsync(model);
+                return this.RedirectToAction("Index");
+            }
+
+
+            return View();
+
         }
     }
 }

@@ -116,6 +116,20 @@ namespace GaragemGestao.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeliverRepairAsync(DeliverViewModel model)
+        {
+            var order = await _context.Repairs.FindAsync(model.Id);
+            if (order == null)
+            {
+                return;
+            }
+
+
+            order.DeliveryDate = model.DeliveryDate;
+            _context.Repairs.Update(order);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task EditDetailsAsync(int id)
         {
             var repairDetailTemp = await _context.RepairDetailTemps.FindAsync(id);
@@ -168,6 +182,11 @@ namespace GaragemGestao.Data.Repositories
                 .ThenInclude(i => i.Vehicle)
                 .Where(o => o.User == user)
                 .OrderByDescending(o => o.RepairDate);
+        }
+
+        public async Task<Repair> GetRepairAsync(int id)
+        {
+            return await _context.Repairs.FindAsync(id);
         }
 
         //The cart will only modify the quantity

@@ -27,5 +27,7 @@ namespace GaragemGestao.Data.Repositories
 
 
         Task<bool> ConfirmRepairAsync(string userName);
+        Task DeliverRepairAsync(DeliverViewModel model);
+        Task<Repair> GetRepairAsync(int id);
     }
 }
