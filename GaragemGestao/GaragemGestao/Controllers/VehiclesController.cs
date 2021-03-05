@@ -29,7 +29,7 @@ namespace GaragemGestao.Controllers
         // GET: Vehicles
         public IActionResult Index()
         {
-            return View(_vehicleRepository.GetAll());
+            return View(_vehicleRepository.GetAll().OrderBy(p => p.ModelName));
         }
 
         // GET: Vehicles/Details/5
@@ -48,7 +48,7 @@ namespace GaragemGestao.Controllers
 
             return View(vehicle);
         }
-        [Authorize(Roles = "Client,Admin")]
+        [Authorize(Roles = "Admin")]
         // GET: Vehicles/Create
         public IActionResult Create()
         {

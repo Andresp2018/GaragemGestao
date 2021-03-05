@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GaragemGestao.Controllers
 {
+    [Authorize]
     public class RepairsController : Controller
     {
         private readonly IRepairRepository _repairRepository;

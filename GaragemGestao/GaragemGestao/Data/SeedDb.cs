@@ -50,15 +50,15 @@ namespace GaragemGestao.Data
                 await _context.SaveChangesAsync();
             }
 
-            var user = await _userHelper.GetUserByEmailAsync("admin@gmail.com");
+            var user = await _userHelper.GetUserByEmailAsync("andrep_developer@outlook.com");
             if (user == null)
             {
                 user = new User
                 {
                     FirstName = "Andre ",
                     LastName = "Pires",
-                    Email = "admin@gmail.com",
-                    UserName = "admin@gmail.com",
+                    Email = "andrep_developer@outlook.com",
+                    UserName = "andrep_developer@outlook.com",
                     Address = "Rua dos Lusiadas nº28",
                     CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
                     City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
