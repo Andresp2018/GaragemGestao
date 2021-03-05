@@ -122,7 +122,7 @@ namespace GaragemGestao.Controllers
                         this.ModelState.AddModelError(string.Empty, "The user couldn't be created.");
                         return this.View(model);
                     }
-
+                    await _userHelper.AddUsertoRoleAsync(user, "Client");
                     var myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
                     var tokenLink = this.Url.Action("ConfirmEmail", "Account", new
                     {

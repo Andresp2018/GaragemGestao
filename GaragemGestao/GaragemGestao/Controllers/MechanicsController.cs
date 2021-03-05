@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GaragemGestao.Data;
 using GaragemGestao.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GaragemGestao.Controllers
 {
+    [Authorize]
     public class MechanicsController : Controller
     {
         private readonly DataContext _context;
@@ -42,7 +44,7 @@ namespace GaragemGestao.Controllers
 
             return View(mechanic);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Mechanics/Create
         public IActionResult Create()
         {
@@ -64,7 +66,7 @@ namespace GaragemGestao.Controllers
             }
             return View(mechanic);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Mechanics/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -115,7 +117,7 @@ namespace GaragemGestao.Controllers
             }
             return View(mechanic);
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Mechanics/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
