@@ -11,5 +11,7 @@ namespace GaragemGestao.Hubs
     {
         public async Task SendMessage(Message message) =>
             await Clients.All.SendAsync("receiveMessage", message);
+
+        
     }
 }
