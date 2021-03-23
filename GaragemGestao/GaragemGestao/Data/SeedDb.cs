@@ -59,7 +59,7 @@ namespace GaragemGestao.Data
                     LastName = "Pires",
                     Email = "andrep_developer@outlook.com",
                     UserName = "andrep_developer@outlook.com",
-                    Address = "Rua dos Lusiadas nº28",
+                    Address = "Rua XXXX",
                     CityId = _context.Countries.FirstOrDefault().Cities.FirstOrDefault().Id,
                     City = _context.Countries.FirstOrDefault().Cities.FirstOrDefault()
                 };
